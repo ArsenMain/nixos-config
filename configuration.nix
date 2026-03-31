@@ -13,7 +13,11 @@
 
   # Bootloader.
   boot.loader.grub.enable = true;
+<<<<<<< HEAD
   boot.loader.grub.device = "/dev/nvme0n1";
+=======
+  boot.loader.grub.device = "/dev/sda";
+>>>>>>> 53b3e05 (Kitty configuration)
   boot.loader.grub.useOSProber = true;
 
   programs.dconf.profiles.user.databases = [
@@ -26,6 +30,12 @@
                         "org/gnome/desktop/wm/keybindings" = {
                                 maximise = ["<Alt>Return"];
                         };
+<<<<<<< HEAD
+=======
+                        "org/gnome/desktop/interface" = {
+                                color-scheme = "prefer-dark";
+                        };
+>>>>>>> 53b3e05 (Kitty configuration)
                 };
         }
   ];
@@ -61,10 +71,13 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+<<<<<<< HEAD
   # Enable the Budgie Desktop environment.
   # services.xserver.displayManager.lightdm.enable = true;
   # services.xserver.desktopManager.budgie.enable = true;
 
+=======
+>>>>>>> 53b3e05 (Kitty configuration)
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
@@ -73,7 +86,11 @@
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
+<<<<<<< HEAD
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
+=======
+  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs wezterm ];
+>>>>>>> 53b3e05 (Kitty configuration)
 
 
   # Configure keymap in X11
@@ -117,6 +134,17 @@
     ];
   };
 
+<<<<<<< HEAD
+=======
+  # Bash
+  programs.bash = {
+        enable = true;
+        shellAliases = {
+                ll = "ls -la";
+        };
+  };
+
+>>>>>>> 53b3e05 (Kitty configuration)
   # Install firefox.
   programs.firefox.enable = true;
 programs.firefox.policies.ExtensionSettings = {
@@ -146,6 +174,7 @@ programs.firefox.policies.ExtensionSettings = {
      neovim
   ];
 
+<<<<<<< HEAD
   /*programs.nvf = {
     enable = true;
     # Your settings need to go into the settings attribute set
@@ -159,6 +188,12 @@ programs.firefox.policies.ExtensionSettings = {
     };
   };*/
 
+=======
+  # Fonts
+  fonts.packages = with pkgs; [
+        nerd-fonts.noto
+  ];
+>>>>>>> 53b3e05 (Kitty configuration)
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
