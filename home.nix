@@ -17,8 +17,6 @@
 		};
 	};
 
-<<<<<<< HEAD
-=======
         # kitty
         programs.kitty = {
                 enable = true;
@@ -37,6 +35,5 @@
                 };
         };
 
->>>>>>> 53b3e05 (Kitty configuration)
 	home.stateVersion = "25.11";
 }
