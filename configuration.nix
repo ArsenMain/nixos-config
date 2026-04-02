@@ -24,7 +24,40 @@
                                 enable-hot-corners = false;
                         };
                         "org/gnome/desktop/wm/keybindings" = {
-                                maximise = ["<Alt>Return"];
+                                maximize = ["<Alt>Return"];
+                        };
+                        "org/gnome/desktop/wm/keybindings" = {
+                                minimize = ["<Alt>Down"];
+                        };
+                        "org/gnome/desktop/wm/keybindings" = {
+                                close = ["<Alt>BackSpace"];
+                        };
+                        "org/gnome/desktop/wm/keybindings" = {
+                                show-desktop = ["<Alt><Super>Down"];
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+                                binding = "<Alt>q";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+                                command = "kitty";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+                                name = "Launch Kitty";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+                                binding = "<Alt>e";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+                                command = "nautilus";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+                                name = "Launch file manager";
+                        };
+                        "org/gnome/settings-daemon/plugins/media-keys" = {
+                                custom-keybindings = [
+                                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" 
+                                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+                                ];
                         };
                         "org/gnome/desktop/interface" = {
                                 color-scheme = "prefer-dark";
@@ -33,17 +66,17 @@
                                 picture-uri = "file:///etc/nixos/resources/inland.webp";
                                 picture-uri-dark = "file:///etc/nixos/resources/inland.webp";
                         };
+                        "org/gnome/desktop/screen-time-limits" = {
+                                daily-limit-enabled = false;
+                        };
+                        "org/gnome/desktop/privacy" = {
+                                disable-camera = true;
+                        };
                 };
         }
   ];
 
   networking.hostName = "errol"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -76,7 +109,9 @@
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
-  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs xterm ];
+  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
+  services.xserver.excludePackages = with pkgs; [ xterm ];
+  
 
 
   # Configure keymap in X11
@@ -130,17 +165,71 @@
 
   # Install firefox.
   programs.firefox.enable = true;
-programs.firefox.policies.ExtensionSettings = {
-	"*" = {
-	  installation_mode = "blocked";
-	};
-	"uBlock0@raymondhill.net" = {
-		default_area = "menupanel";
-		install_url = "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi";
-		installation_mode = "force_installed";
-		private_browsing = true;
-	};
-};
+  programs.firefox.policies = {
+        DisableFirefoxScreenshots = true;
+        DisableFirefoxStudies = true;
+        ExtensionSettings = {
+                "*" = {
+                  installation_mode = "blocked";
+                };
+                "uBlock0@raymondhill.net" = {
+                        default_area = "menupanel";
+                        install_url = "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi";
+                        installation_mode = "force_installed";
+                        private_browsing = true;
+                };
+        };
+  };
+
+  programs.htop = {
+        enable = true;
+        settings = {
+                hide_kernel_threads=1;
+                hide_userland_threads=0;
+                hide_running_in_container=0;
+                shadow_other_users=0;
+                show_thread_names=0;
+                show_program_path=1;
+                highlight_base_name=0;
+                highlight_deleted_exe=1;
+                shadow_distribution_path_prefix=0;
+                highlight_megabytes=1;
+                highlight_threads=1;
+                highlight_changes=0;
+                highlight_changes_delay_secs=5;
+                find_comm_in_cmdline=1;
+                strip_exe_from_cmdline=1;
+                show_merged_command=0;
+                header_margin=1;
+                screen_tabs=1;
+                detailed_cpu_time=0;
+                cpu_count_from_one=0;
+                show_cpu_usage=1;
+                show_cpu_frequency=0;
+                show_cpu_temperature=0;
+                degree_fahrenheit=0;
+                show_cached_memory=1;
+                update_process_names=0;
+                account_guest_in_cpu_meter=0;
+                color_scheme=6;
+                enable_mouse=1;
+                delay=15;
+                hide_function_bar=0;
+                header_layout="two_67_33";
+                column_meters_0=["AllCPUs" "Memory" "Swap"];
+                column_meter_modes_0=[1 1 1];
+                column_meters_1=["Clock" "Tasks" "LoadAverage"];
+                column_meter_modes_1=[2 2 2];
+                tree_view=1;
+                sort_key=46;
+                tree_sort_key=47;
+                sort_direction=-1;
+                tree_sort_direction=-1;
+                tree_view_always_by_pid=0;
+                all_branches_collapsed=1;
+                screen = ["Main" "PID" "USER" "STATE" "PERCENT_CPU" "PERCENT_MEM" "TIME" "Command"];
+        };
+  };
 
 
   # Allow unfree packages
@@ -149,19 +238,27 @@ programs.firefox.policies.ExtensionSettings = {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      pavucontrol
      git
      wget
      xclip
      neovim
      nautilus
+     pass
+     dotnetCorePackages.sdk_9_0_1xx
+     nodejs
   ];
 
   # Fonts
   fonts.packages = with pkgs; [
         nerd-fonts.noto
   ];
+
+  # Dotnet (look at systemPkgs)
+  programs.nix-ld.enable = true;
+
+  # Storage optimisation
+  nix.optimise.automatic = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

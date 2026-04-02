@@ -1,16 +1,16 @@
 # To do
-## Overview
+## Overview (Navigation -> hide all normal windows)
 This list of things serves as both a to do for things that need to be manually set, and things that I should try to get working declaratively.
 
 ## Configuration
-### Keybinds
-GNOME keybinds don't work declaratively. Currently, it's in the config file, but it doesn't work.
-Keybinds:
-- Alt + Enter -> Maximise window
-- Alt + Down -> Hide window
-- Super + Alt + Down -> Peek desktop
-- Alt + Del -> Close window
+### Neovim
+Currently trying NVF. Alternatives could be Nixvim or nixCats / nix-wrapper. Port nvim configuration over, find all the options.
+
+### pass
+Is that even possible declaratively?? Lmao.
+
+### VSCode
+Using VSCodium. Either way, not all plugins can be installed via the config. Missing:
+- C# dev environment. Manually installing DotRush
 
 ## Customisation
-### Kitty
-I'm referencing the Kaolin Ocean theme, but it still needs to be fetched manually.

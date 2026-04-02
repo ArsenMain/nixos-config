@@ -31,8 +31,18 @@
                         initial_window_height = 400;
                         linux_display_server = "x11";
                         tab_bar_style = "powerline";
-                        include = "/home/lily/.config/kitty/Kaolin Ocean.conf";
+                        include = "/etc/nixos/resources/Kaolin Ocean.conf";
                 };
+        };
+
+        programs.vscode = {
+          enable = true;
+          package = pkgs.vscodium;
+          profiles.default.extensions = with pkgs.vscode-extensions; [
+            dracula-theme.theme-dracula
+            vscodevim.vim
+            yzhang.markdown-all-in-one
+          ];
         };
 
 	home.stateVersion = "25.11";

@@ -1,5 +1,5 @@
 {
-  description = "A template that shows all standard flake outputs";
+  description = "Lily's Lovely (f)Lake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
@@ -14,7 +14,6 @@
   };
 
   outputs = { self, nixpkgs, home-manager, nvf, ... }@inputs: {
-    # Please replace my-nixos with your hostname
     nixosConfigurations.errol = nixpkgs.lib.nixosSystem {
       modules = [
         ./configuration.nix
