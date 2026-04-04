@@ -50,6 +50,7 @@
                                 picture-uri-dark = "file:///etc/nixos/resources/inland.webp";
                         };
                         "org/gnome/desktop/screen-time-limits" = {
+                                history-enabled = false;
                                 daily-limit-enabled = false;
                         };
                 };
@@ -125,7 +126,7 @@
     description = "lily";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
+        discord
     ];
   };
 
@@ -155,6 +156,10 @@
                         Stories = false;
                         SponsoredStories = false;
                 };
+                SearchEngines = {
+                        Default = "Startpage - English";
+                        DefaultPrivate = "Startpage - English";
+                };
                 ExtensionSettings = {
                         "*" = {
                           installation_mode = "blocked";
@@ -165,6 +170,13 @@
                                 installation_mode = "force_installed";
                                 private_browsing = true;
                         };
+                        "{20fc2e06-e3e4-4b2b-812b-ab431220cada}" = {
+                                default_area = "menupanel";
+                                install_url = "https://addons.mozilla.org/firefox/downloads/latest/{20fc2e06-e3e4-4b2b-812b-ab431220cada}/latest.xpi";
+                                installation_mode = "force_installed";
+                                private_browsing = true;
+                        };
+
                 };
         };
   };
@@ -238,6 +250,8 @@
      node2nix
      mysql-workbench
      unixtools.netstat
+     pgadmin4-desktopmode
+     dbeaver-bin
   ];
 
   # Fonts
@@ -259,9 +273,23 @@
   # };
 
   # List services 
+
+  # MySQL
   services.mysql = {
         enable = true;
         package = pkgs.mariadb;
+  };
+
+  # PostgreSQL
+  services.postgresql = {
+        enable = true;
+        ensureDatabases = [ "initdb" ];
+        authentication = pkgs.lib.mkOverride 10 ''
+                #type database  DBuser  auth-method
+                local all       all     trust
+                host all       all     127.0.0.1/32    scram-sha-256
+        '';
+
   };
 
   # Enable the OpenSSH daemon.
