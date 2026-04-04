@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, lib, home-manager, ... }:
 
 
@@ -12,9 +8,11 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.grub = {
+        enable = true;
+        device = "/dev/sda";
+        useOSProber = true;
+  };
 
   programs.dconf.profiles.user.databases = [
         {
@@ -22,45 +20,30 @@
                 settings = {
                         "org/gnome/desktop/interface" = {
                                 enable-hot-corners = false;
+                                color-scheme = "prefer-dark";
                         };
                         "org/gnome/desktop/wm/keybindings" = {
                                 maximize = ["<Alt>Return"];
-                        };
-                        "org/gnome/desktop/wm/keybindings" = {
                                 minimize = ["<Alt>Down"];
-                        };
-                        "org/gnome/desktop/wm/keybindings" = {
                                 close = ["<Alt>BackSpace"];
-                        };
-                        "org/gnome/desktop/wm/keybindings" = {
                                 show-desktop = ["<Alt><Super>Down"];
                         };
                         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
                                 binding = "<Alt>q";
-                        };
-                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
                                 command = "kitty";
-                        };
-                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
                                 name = "Launch Kitty";
                         };
                         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
                                 binding = "<Alt>e";
-                        };
-                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
                                 command = "nautilus";
-                        };
-                        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
-                                name = "Launch file manager";
+                                name = "Launch Nautilus";
                         };
                         "org/gnome/settings-daemon/plugins/media-keys" = {
+                                screensaver = ["<Control><Alt>l"];
                                 custom-keybindings = [
                                 "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" 
                                 "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
                                 ];
-                        };
-                        "org/gnome/desktop/interface" = {
-                                color-scheme = "prefer-dark";
                         };
                         "org/gnome/desktop/background" = {
                                 picture-uri = "file:///etc/nixos/resources/inland.webp";
@@ -68,9 +51,6 @@
                         };
                         "org/gnome/desktop/screen-time-limits" = {
                                 daily-limit-enabled = false;
-                        };
-                        "org/gnome/desktop/privacy" = {
-                                disable-camera = true;
                         };
                 };
         }
@@ -101,11 +81,10 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  # GNOME and GDM
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
-  # To disable installing GNOME's suite of applications
-  # and only be left with GNOME shell.
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
@@ -131,12 +110,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -163,20 +137,34 @@
         };
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
-  programs.firefox.policies = {
-        DisableFirefoxScreenshots = true;
-        DisableFirefoxStudies = true;
-        ExtensionSettings = {
-                "*" = {
-                  installation_mode = "blocked";
+  # Install firefox
+  programs.firefox = {
+        enable = true;
+        policies = {
+                DisableFirefoxScreenshots = true;
+                DisableFirefoxStudies = true;
+                PromptForDownloadLocation = true;
+                PasswordManagerEnabled = false;
+                GenerativeAI.Enabled = false;
+                FirefoxSuggest.SponsoredSuggestions = false;
+                FirefoxHome = {
+                        Search = false;
+                        TopSites = false;
+                        SponsoredTopSites = false;
+                        Highlights = false;
+                        Stories = false;
+                        SponsoredStories = false;
                 };
-                "uBlock0@raymondhill.net" = {
-                        default_area = "menupanel";
-                        install_url = "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi";
-                        installation_mode = "force_installed";
-                        private_browsing = true;
+                ExtensionSettings = {
+                        "*" = {
+                          installation_mode = "blocked";
+                        };
+                        "uBlock0@raymondhill.net" = {
+                                default_area = "menupanel";
+                                install_url = "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi";
+                                installation_mode = "force_installed";
+                                private_browsing = true;
+                        };
                 };
         };
   };
@@ -247,6 +235,9 @@
      pass
      dotnetCorePackages.sdk_9_0_1xx
      nodejs
+     node2nix
+     mysql-workbench
+     unixtools.netstat
   ];
 
   # Fonts
@@ -267,7 +258,11 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
+  # List services 
+  services.mysql = {
+        enable = true;
+        package = pkgs.mariadb;
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
