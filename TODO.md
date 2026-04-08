@@ -14,6 +14,6 @@ Using VSCodium. Either way, not all plugins can be installed via the config. Mis
 - C# dev environment. Manually installing DotRush
 
 # Packet Tracer
-Not totally possible to install declaratively. Before building the configuration, download the Packet Tracer 9 `CiscoPacketTracer_900_Ubuntu_64bit.deb` file from https://netacad.com/resources/lab-downloads and place it into resources.
+Using version 8.2.2. Needs to be installed as `CiscoPacketTracer822_amd64_signed.deb`.
 
 ## Customisation

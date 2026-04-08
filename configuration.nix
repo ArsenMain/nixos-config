@@ -55,6 +55,74 @@
                         };
                 };
         }
+=======
+{
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  ...
+}:
+
+{
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
+
+  # Bootloader.
+  boot.loader.grub = {
+    enable = true;
+    device = "/dev/sda";
+    useOSProber = true;
+  };
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "ciscoPacketTracer8-8.2.2"
+  ];
+
+  programs.dconf.profiles.user.databases = [
+    {
+      lockAll = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+          enable-hot-corners = false;
+          color-scheme = "prefer-dark";
+        };
+        "org/gnome/desktop/wm/keybindings" = {
+          maximize = [ "<Alt>Return" ];
+          minimize = [ "<Alt>Down" ];
+          close = [ "<Alt>BackSpace" ];
+          show-desktop = [ "<Alt><Super>Down" ];
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+          binding = "<Alt>q";
+          command = "kitty";
+          name = "Launch Kitty";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+          binding = "<Alt>e";
+          command = "nautilus";
+          name = "Launch Nautilus";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys" = {
+          screensaver = [ "<Control><Alt>l" ];
+          custom-keybindings = [
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+          ];
+        };
+        "org/gnome/desktop/background" = {
+          picture-uri = "file:///home/lily/.config/nixos-config/resources/inland.webp";
+          picture-uri-dark = "file:///home/lily/.config/nixos-config/resources/inland.webp";
+        };
+        "org/gnome/desktop/screen-time-limits" = {
+          history-enabled = false;
+          daily-limit-enabled = false;
+        };
+      };
+    }
+>>>>>>> 62e48f6 (stuff. kinda forgot)
   ];
 
   networking.hostName = "errol"; # Define your hostname.
@@ -89,10 +157,18 @@
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
+<<<<<<< HEAD
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
   services.xserver.excludePackages = with pkgs; [ xterm ];
   
 
+=======
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    gnome-user-docs
+  ];
+  services.xserver.excludePackages = with pkgs; [ xterm ];
+>>>>>>> 62e48f6 (stuff. kinda forgot)
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -100,6 +176,28 @@
     variant = "";
   };
 
+<<<<<<< HEAD
+=======
+  # Intel (???)
+  services.xserver.videoDrivers = [ "modesetting" ];
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vpl-gpu-rt
+    ];
+  };
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD"; # Prefer the modern iHD backend
+    # VDPAU_DRIVER = "va_gl";      # Only if using libvdpau-va-gl
+  };
+
+  # May help if FFmpeg/VAAPI/QSV init fails (esp. on Arc with i915):
+  hardware.enableRedistributableFirmware = true;
+  boot.kernelParams = [ "i915.enable_guc=3" ];
+
+>>>>>>> 62e48f6 (stuff. kinda forgot)
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -118,28 +216,53 @@
   # services.xserver.libinput.enable = true;
 
   # Enable flakes
+<<<<<<< HEAD
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+=======
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+>>>>>>> 62e48f6 (stuff. kinda forgot)
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lily = {
     isNormalUser = true;
     description = "lily";
+<<<<<<< HEAD
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
         discord
+=======
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
+    packages = with pkgs; [
+      discord
+      nixfmt
+>>>>>>> 62e48f6 (stuff. kinda forgot)
     ];
   };
 
   # Bash
   programs.bash = {
+<<<<<<< HEAD
         enable = true;
         shellAliases = {
                 ll = "ls -la";
         };
+=======
+    enable = true;
+    shellAliases = {
+      ll = "ls -la";
+    };
+>>>>>>> 62e48f6 (stuff. kinda forgot)
   };
 
   # Install firefox
   programs.firefox = {
+<<<<<<< HEAD
         enable = true;
         policies = {
                 DisableFirefoxScreenshots = true;
@@ -232,26 +355,147 @@
   };
 
 
+=======
+    enable = true;
+    policies = {
+      DisableFirefoxScreenshots = true;
+      DisableFirefoxStudies = true;
+      PromptForDownloadLocation = true;
+      PasswordManagerEnabled = false;
+      GenerativeAI.Enabled = false;
+      FirefoxSuggest.SponsoredSuggestions = false;
+      FirefoxHome = {
+        Search = false;
+        TopSites = false;
+        SponsoredTopSites = false;
+        Highlights = false;
+        Stories = false;
+        SponsoredStories = false;
+      };
+      SearchEngines = {
+        Default = "Startpage - English";
+        DefaultPrivate = "Startpage - English";
+      };
+      ExtensionSettings = {
+        "*" = {
+          installation_mode = "blocked";
+        };
+        "uBlock0@raymondhill.net" = {
+          default_area = "menupanel";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/uBlock0@raymondhill.net/latest.xpi";
+          installation_mode = "force_installed";
+          private_browsing = true;
+        };
+        "{20fc2e06-e3e4-4b2b-812b-ab431220cada}" = {
+          default_area = "menupanel";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/{20fc2e06-e3e4-4b2b-812b-ab431220cada}/latest.xpi";
+          installation_mode = "force_installed";
+          private_browsing = true;
+        };
+
+      };
+    };
+  };
+
+  programs.htop = {
+    enable = true;
+    settings = {
+      hide_kernel_threads = 1;
+      hide_userland_threads = 0;
+      hide_running_in_container = 0;
+      shadow_other_users = 0;
+      show_thread_names = 0;
+      show_program_path = 1;
+      highlight_base_name = 0;
+      highlight_deleted_exe = 1;
+      shadow_distribution_path_prefix = 0;
+      highlight_megabytes = 1;
+      highlight_threads = 1;
+      highlight_changes = 0;
+      highlight_changes_delay_secs = 5;
+      find_comm_in_cmdline = 1;
+      strip_exe_from_cmdline = 1;
+      show_merged_command = 0;
+      header_margin = 1;
+      screen_tabs = 1;
+      detailed_cpu_time = 0;
+      cpu_count_from_one = 0;
+      show_cpu_usage = 1;
+      show_cpu_frequency = 0;
+      show_cpu_temperature = 0;
+      degree_fahrenheit = 0;
+      show_cached_memory = 1;
+      update_process_names = 0;
+      account_guest_in_cpu_meter = 0;
+      color_scheme = 6;
+      enable_mouse = 1;
+      delay = 15;
+      hide_function_bar = 0;
+      header_layout = "two_67_33";
+      column_meters_0 = [
+        "AllCPUs"
+        "Memory"
+        "Swap"
+      ];
+      column_meter_modes_0 = [
+        1
+        1
+        1
+      ];
+      column_meters_1 = [
+        "Clock"
+        "Tasks"
+        "LoadAverage"
+      ];
+      column_meter_modes_1 = [
+        2
+        2
+        2
+      ];
+      tree_view = 1;
+      sort_key = 46;
+      tree_sort_key = 47;
+      sort_direction = -1;
+      tree_sort_direction = -1;
+      tree_view_always_by_pid = 0;
+      all_branches_collapsed = 1;
+      screen = [
+        "Main"
+        "PID"
+        "USER"
+        "STATE"
+        "PERCENT_CPU"
+        "PERCENT_MEM"
+        "TIME"
+        "Command"
+      ];
+    };
+  };
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     pavucontrol
-     git
-     wget
-     xclip
-     neovim
-     nautilus
-     pass
-     dotnetCorePackages.sdk_9_0_1xx
-     nodejs
-     node2nix
-     mysql-workbench
-     unixtools.netstat
-     pgadmin4-desktopmode
-     dbeaver-bin
+    pavucontrol
+    git
+    wget
+    xclip
+    neovim
+    nautilus
+    pass
+    dotnetCorePackages.sdk_9_0_1xx
+    nodejs
+    node2nix
+    mysql-workbench
+    unixtools.netstat
+    pgadmin4-desktopmode
+    dbeaver-bin
+    (ciscoPacketTracer8.override {
+      packetTracerSource = ./resources/CiscoPacketTracer822_amd64_signed.deb;
+    })
+    unzip
+    zip
   ];
 
   # Fonts
@@ -289,7 +533,6 @@
                 local all       all     trust
                 host all       all     127.0.0.1/32    scram-sha-256
         '';
-
   };
 
   # Enable the OpenSSH daemon.
