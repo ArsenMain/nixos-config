@@ -6,6 +6,20 @@
       vim = {
         viAlias = false;
         vimAlias = true;
+        autocmds = [
+          {
+            enable = true;
+            event = [ "BufEnter" ];
+            pattern = [ "*" ];
+            command = "setlocal indentexpr=nvim_treesitter#indent()";
+          }
+          {
+            enable = true;
+            event = [ "VimEnter" ];
+            pattern = [ "*" ];
+            command = ":NvimTreeClose";
+          }
+        ];
         luaConfigPost = ''
           vim.api.nvim_create_autocmd("TextYankPost", {
             desc = "Highlight when yanking (copying) text",
@@ -21,6 +35,10 @@
           autoindent = true;
         };
 
+        opts = {
+          tabstop = 4;
+        };
+
         clipboard = {
           enable = true;
           registers = "unnamedplus";
@@ -33,11 +51,6 @@
             "lsp"
             "snippets"
           ];
-          mappings = {
-            #confirm = "<Tab>"; # maybe I'm stupid?
-            #next = "<down>";
-            #previous = "<up>";
-          };
         };
         lsp = {
           enable = true;
@@ -64,12 +77,26 @@
             extraDiagnostics.enable = true;
             format = {
               enable = true;
-              # TODO
-              type = [ "nixfmt" ]; # Currently seems to fuck up tab spacing (or however you want to call it)
+              type = [ "nixfmt" ];
             };
           };
 
           rust = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
+          };
+          ts = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
+          };
+          python = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
+          };
+          clang = {
             enable = true;
             lsp.enable = true;
           };
@@ -118,6 +145,12 @@
         visuals = {
           nvim-web-devicons.enable = true;
         };
+        diagnostics = {
+          enable = true;
+          config = {
+            virtual_lines = true;
+          };
+        };
         keymaps = [
           {
             key = "F";
@@ -125,9 +158,26 @@
             silent = true;
             action = ":NvimTreeOpen<ENTER>";
           }
+          {
+            key = "T";
+            mode = "n";
+            silent = true;
+            action = ":NvimTreeClose<ENTER>";
+          }
+          {
+            key = "E";
+            mode = "n";
+            silent = true;
+            action = "$";
+          }
+          {
+            key = "B";
+            mode = "n";
+            silent = true;
+            action = "0";
+          }
         ];
       };
->>>>>>> 62e48f6 (stuff. kinda forgot)
     };
   };
 }

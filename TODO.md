@@ -1,11 +1,8 @@
 # To do
-## Overview (Navigation -> hide all normal windows)
+## Overview 
 This list of things serves as both a to do for things that need to be manually set, and things that I should try to get working declaratively.
 
 ## Configuration
-# Neovim
-Currently trying NVF. Alternatives could be Nixvim or nixCats / nix-wrapper. Port nvim configuration over, find all the options.
-
 # pass
 Is that even possible declaratively?? Lmao.
 
