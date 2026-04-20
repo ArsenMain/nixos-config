@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, home-manager, ... }:
 
 {
   imports = [
@@ -36,9 +33,14 @@
   };
 
   nixpkgs.config = {
-    permittedInsecurePackages = [
-      "cisco-packet-tracer-8.2.2"
-    ];
+    # 25.11
+    /*
+      permittedInsecurePackages = [
+        "ciscoPacketTracer8-8.2.2"
+      ];
+    */
+    # unstable
+    permittedInsecurePackages = [ "cisco-packet-tracer-8.2.2" ];
     allowUnfree = true;
   };
   # Programs
@@ -95,9 +97,10 @@
   };
 
   # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.noto
-  ];
+  fonts.packages = with pkgs; [ nerd-fonts.noto ];
+
+  # home-manager
+  home-manager.backupFileExtension = "hmb";
 
   #programs.niri.enable = true;
   #programs.niri.package = pkgs.niri;

@@ -1,16 +1,5 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
-  # nvim
-  /*
-    programs.neovim = {
-    		enable = true;
-    		viAlias = true;
-    		vimAlias = true;
-    		vimdiffAlias = true;
-
-    	};
-  */
-
   # git
   programs.git = {
     enable = true;
@@ -32,7 +21,7 @@
       remember_window_size = "no";
       initial_window_width = 800;
       initial_window_height = 400;
-      linux_display_server = "x11";
+      linux_display_server = "wayland";
       tab_bar_style = "powerline";
       include = "~/.config/nixos-config/resources/Kaolin Ocean.conf";
       #sync_to_monitor = "yes";

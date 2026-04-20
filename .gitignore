@@ -1,6 +1,2 @@
-<<<<<<< HEAD
 hosts/**/hardware-configuration.nix
-=======
-hardware-configuration.nix
-/resources/CiscoPacketTracer822_amd64_signed.deb
->>>>>>> 6f56d485f8f1231f83c487b442d073a0647752ae
+type.sh

@@ -16,6 +16,7 @@
     mysql-workbench
     gimp2
     libreoffice-qt
+    gnome-feeds
   ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -31,6 +32,8 @@
     unzip
     zip
     libgcc
+    gnome-calculator
+    gnome-console
   ];
   # Dotnet (look at systemPkgs)
   programs.nix-ld.enable = true;

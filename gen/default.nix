@@ -4,6 +4,6 @@
     ./bash.nix
     ./htop.nix
     ./nvim.nix
-    ./noctalia.nix
+    ./niri.nix
   ];
 }

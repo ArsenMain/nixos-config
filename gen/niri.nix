@@ -1,0 +1,207 @@
+{ pkgs, inputs, ... }:
+{
+  services.displayManager.dms-greeter = {
+    enable = true;
+    compositor.name = "niri";
+    # Sync your user's DankMaterialShell theme with the greeter. You'll probably want this
+    configHome = "/home/lily";
+
+    # Custom config files for non-standard config locations
+    configFiles = [ "/home/lily/.config/DankMaterialShell/settings.json" ];
+  };
+  nixpkgs.overlays = [ inputs.niri.overlays.niri ];
+  programs = {
+    dms-shell = {
+      enable = true;
+      enableSystemMonitoring = false; # System monitoring widgets (dgop)
+      enableVPN = false; # VPN management widget
+      enableDynamicTheming = false; # Wallpaper-based theming (matugen)
+      enableAudioWavelength = false; # Audio visualizer (cava)
+      enableCalendarEvents = false; # Calendar integration (khal)
+      enableClipboardPaste = true; # Pasting from the clipboard history (wtype)
+    };
+    niri = {
+      package = pkgs.niri-unstable;
+      enable = true;
+    };
+
+  };
+  home-manager.users.lily = {
+
+    # niri
+    programs.niri = {
+      settings = {
+        spawn-at-startup = [
+          {
+            command = [
+              "dms"
+              "ipc"
+              "call"
+              "wallpaper"
+              "set"
+              "/home/lily/.config/nixos-config/resources/inland.webp"
+            ];
+          }
+        ];
+        gestures.hot-corners.enable = false;
+        input = {
+          keyboard = {
+            xkb = {
+              layout = "at";
+            };
+          };
+          touchpad = {
+            enable = true;
+            tap = true;
+            natural-scroll = true;
+          };
+          mouse = {
+            enable = true;
+          };
+          trackpoint = {
+            enable = true;
+          };
+        };
+        layout = {
+          background-color = "transparent";
+          center-focused-column = "never";
+          preset-column-widths = [
+            { proportion = 0.3333; }
+            { proportion = 0.5; }
+            { proportion = 0.6667; }
+          ];
+          default-column-width = {
+            proportion = 0.5;
+          };
+          border = {
+            enable = true;
+            width = 2;
+          };
+          focus-ring = {
+            enable = true;
+            width = 2;
+          };
+          shadow = {
+            enable = true;
+            spread = 5;
+            softness = 30;
+            offset = {
+              x = 0;
+              y = 5;
+            };
+            color = "#130166";
+          };
+        };
+        environment = {
+          XDG_CURRENT_DESKTOP = "niri";
+        };
+
+        hotkey-overlay.skip-at-startup = true;
+        prefer-no-csd = true;
+        screenshot-path = "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png";
+        animations = {
+          enable = true;
+          workspace-switch = {
+            enable = true;
+            kind = {
+              spring = {
+                damping-ratio = 1.00;
+                stiffness = 900;
+                epsilon = 0.0001;
+              };
+            };
+          };
+        };
+        binds = {
+          "Alt+Q".action.spawn = [ "kitty" ];
+          "Alt+Backspace".action.close-window = [ ];
+          "Alt+Return".action.maximize-window-to-edges = [ ];
+          "Alt+Shift+Return".action.fullscreen-window = [ ];
+          "XF86AudioRaiseVolume" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "audio"
+              "increment"
+              "3"
+            ];
+          };
+          "XF86AudioLowerVolume" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "audio"
+              "decrement"
+              "3"
+            ];
+          };
+          "XF86AudioMute" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "audio"
+              "mute"
+            ];
+          };
+          "XF86AudioMicMute" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "audio"
+              "micmute"
+            ];
+          };
+          "XF86MonBrightnessUp" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "brightness"
+              "increment"
+              "5"
+            ];
+          };
+          "XF86MonBrightnessDown" = {
+            allow-when-locked = true;
+            action.spawn = [
+              "dms"
+              "ipc"
+              "call"
+              "brightness"
+              "decrement"
+              "5"
+            ];
+          };
+          "Mod+Left".action.focus-column-left = [ ];
+          "Mod+Down".action.focus-window-down = [ ];
+          "Mod+Up".action.focus-window-up = [ ];
+          "Mod+Right".action.focus-column-right = [ ];
+
+          "Mod+Shift+Left".action.move-column-left = [ ];
+          "Mod+Shift+Down".action.move-window-down = [ ];
+          "Mod+Shift+Up".action.move-window-up = [ ];
+          "Mod+Shift+Right".action.move-column-right = [ ];
+
+          "Alt+Shift+Left".action.set-column-width = [ "-10%" ];
+          "Alt+Shift+Right".action.set-column-width = [ "+10%" ];
+          "Alt+Shift+Up".action.set-window-height = [ "-10%" ];
+          "Alt+Shift+Down".action.set-window-height = [ "+10%" ];
+
+          "Print".action.spawn = [ "dms" "screenshot" ];
+          "Ctrl+Print".action.spawn = [ "dms" "screenshot" "--no-file" ];
+
+          "Alt+R".action.spawn = [ "dms" "ipc" "launcher" "open" ];
+        };
+      };
+    };
+  };
+}
