@@ -6,15 +6,15 @@ This list of things serves as both a to do for things that need to be manually s
 
 
 ## Configuration
-# pass
-Is that even possible declaratively?? Lmao.
-
 # VSCode
 Using VSCodium. Either way, not all plugins can be installed via the config. Missing:
 - C# dev environment. Manually installing DotRush
 
-# Packet Tracer
-Using custom URL (and version 8)
-
 ## Customisation
-niri + dms-shell
+Until I get the dms-shell home-manager module to work, configurations like the wallpaper still need to be done manually
+config 
+* Dank Bar - Font scale + Icon scale: 110%
+* Dank Bar - Center section only has clock
+* Disable animations etc.
+* Wallpaper -> inland.webp
+OR I drop dms 

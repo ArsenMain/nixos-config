@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   users.users.lily.packages = with pkgs; [
-    discord
     nixfmt
     (ciscoPacketTracer8.override {
       packetTracerSource = builtins.fetchurl {
@@ -16,7 +15,6 @@
     mysql-workbench
     gimp2
     libreoffice-qt
-    gnome-feeds
   ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -34,6 +32,11 @@
     libgcc
     gnome-calculator
     gnome-console
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+    gnome-keyring
+    # Support for X11 apps (like Discord)
+    xwayland-satellite
   ];
   # Dotnet (look at systemPkgs)
   programs.nix-ld.enable = true;

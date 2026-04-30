@@ -39,5 +39,35 @@
     ];
   };
 
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      #placeholder = "peepee";
+      /*
+        font = {
+                name = "NotoMono Nerd Font";
+                size = 20;
+        };
+      */
+    };
+
+  };
+
+    programs.feedr = {
+      enable = true;
+      settings = {
+        max_dashboard_items = 100;
+        theme = "dark";
+      };
+    };
+
+    programs.vesktop = {
+        enable = true;
+    };
+
+  services.mako = {
+    enable = true;
+  };
+
   home.stateVersion = "25.11";
 }
