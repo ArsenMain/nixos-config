@@ -1,17 +1,6 @@
-{ pkgs, home-manager, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./firefox.nix
-    ./gnome.nix
-    ./iris.nix
-    ./pkgs.nix
-    ./mysql.nix
-    ./postgres.nix
-  ];
-
   # Bootloader.
   boot = {
     loader.grub = {
@@ -43,7 +32,7 @@
     permittedInsecurePackages = [ "cisco-packet-tracer-8.2.2" ];
     allowUnfree = true;
   };
-  # Programs
+
   networking = {
     hostName = "stina"; # Define your hostname
     # Enable networking

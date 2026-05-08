@@ -32,9 +32,10 @@
     libgcc
     gnome-calculator
     gnome-console
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-gnome
-    gnome-keyring
+    #xdg-desktop-portal-gtk
+    #xdg-desktop-portal-gnome
+    xdg-desktop-portal-termfilechooser
+    #gnome-keyring
     # Support for X11 apps (like Discord)
     xwayland-satellite
   ];

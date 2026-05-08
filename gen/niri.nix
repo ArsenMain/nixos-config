@@ -1,4 +1,9 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 {
   environment.systemPackages = with pkgs; [ swaybg ];
   services.displayManager.ly.enable = true;
@@ -11,10 +16,39 @@
     };
 
   };
+
+  environment.variables = {
+    # For applications that don't use portals by default
+    # These environment variables set using portals for older (GTK_USE_PORTAL) and newer (GDK_DEBUG) apps
+    GTK_USE_PORTAL = "1"; # legacy
+    GDK_DEBUG = "portals"; # termfilechooser
+  };
+
   # Authentication agent needed
   security.polkit.enable = true;
 
   home-manager.users.lily = {
+
+    # XDG portal integration
+    xdg = {
+      portal = {
+        enable = true;
+        extraPortals = with pkgs; [ xdg-desktop-portal-termfilechooser ];
+        config = {
+          common = {
+            default = [ "*" ];
+            "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+          };
+        };
+        xdgOpenUsePortal = true;
+      };
+      configFile."xdg-desktop-portal-termfilechooser/config" = {
+        text = ''
+          [filechooser]
+          cmd=$HOME/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+        '';
+      };
+    };
 
     programs = {
       # waybar
@@ -29,7 +63,7 @@
             modules-center = [ "clock" ];
 
             "clock" = {
-              format-alt = "{:%a, %d. %b  %H:%M}";
+              format-alt = "{:%d. %b}";
             };
           };
         };

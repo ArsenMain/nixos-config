@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   # git
   programs.git = {
@@ -53,17 +53,17 @@
 
   };
 
-    programs.feedr = {
-      enable = true;
-      settings = {
-        max_dashboard_items = 100;
-        theme = "dark";
-      };
+  programs.feedr = {
+    enable = true;
+    settings = {
+      max_dashboard_items = 100;
+      theme = "dark";
     };
+  };
 
-    programs.vesktop = {
-        enable = true;
-    };
+  programs.vesktop = {
+    enable = true;
+  };
 
   services.mako = {
     enable = true;
