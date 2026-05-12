@@ -20,6 +20,7 @@
             command = ":NvimTreeClose";
           }
         ];
+
         luaConfigPost = ''
           vim.api.nvim_create_autocmd("TextYankPost", {
             desc = "Highlight when yanking (copying) text",
@@ -48,6 +49,11 @@
             "lsp"
             "snippets"
           ];
+          mappings = {
+            confirm = "<Tab>";
+            next = "<DOWN>";
+            previous = "<UP>";
+          };
         };
         lsp = {
           enable = true;
@@ -96,6 +102,16 @@
           clang = {
             enable = true;
             lsp.enable = true;
+          };
+          css = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
+          };
+          html = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
           };
         };
         statusline.lualine = {

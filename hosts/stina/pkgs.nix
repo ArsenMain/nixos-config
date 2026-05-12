@@ -19,12 +19,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pavucontrol
     git
     wget
     xclip
     neovim
-    nautilus
     nodejs
     unixtools.netstat
     unzip
@@ -32,12 +30,11 @@
     libgcc
     gnome-calculator
     gnome-console
-    #xdg-desktop-portal-gtk
-    #xdg-desktop-portal-gnome
     xdg-desktop-portal-termfilechooser
-    #gnome-keyring
     # Support for X11 apps (like Discord)
     xwayland-satellite
+    ncdu
+    brightnessctl
   ];
   # Dotnet (look at systemPkgs)
   programs.nix-ld.enable = true;

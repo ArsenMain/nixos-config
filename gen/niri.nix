@@ -1,12 +1,24 @@
+{ pkgs, inputs, ... }:
 {
-  pkgs,
-  inputs,
-  lib,
-  ...
-}:
-{
-  environment.systemPackages = with pkgs; [ swaybg ];
-  services.displayManager.ly.enable = true;
+  environment.systemPackages = with pkgs; [
+    swaybg
+    bibata-cursors
+  ];
+  services.displayManager.ly = {
+    enable = true;
+    settings = {
+      /*
+        animation = "gameoflife";
+        gameoflife_fg = "0xff0a0ad9";
+        animation_frame_delay = 5;
+        animation_timeout_sec = 0;
+      */
+      battery_id = "BAT0";
+      bigclock = "en";
+      bigclock_12hr = false;
+      clear_password = true;
+    };
+  };
   nixpkgs.overlays = [ inputs.niri.overlays.niri ];
 
   programs = {
@@ -14,7 +26,6 @@
       package = pkgs.niri-unstable;
       enable = true;
     };
-
   };
 
   environment.variables = {
@@ -26,6 +37,12 @@
 
   # Authentication agent needed
   security.polkit.enable = true;
+
+  /*
+    # Set up additional programs as systemd services (waybar, swaybg, ...)
+    systemd.user.services = {
+    };
+  */
 
   home-manager.users.lily = {
 
@@ -49,42 +66,11 @@
         '';
       };
     };
-
     programs = {
-      # waybar
-      waybar = {
-        enable = true;
-        settings = {
-          mainBar = {
-            position = "top";
-            layer = "top";
-            height = 35;
-
-            modules-center = [ "clock" ];
-
-            "clock" = {
-              format-alt = "{:%d. %b}";
-            };
-          };
-        };
-        style = ''
-                * {
-                        font-family: NotoMono Nerd Font;
-                        font-size: 25px;
-                }
-          window#waybar {
-                  background-color: black;
-          }
-          #clock {
-                color: white;
-          }
-        '';
-      };
       # niri
       niri = {
         settings = {
           spawn-at-startup = [
-            { command = [ "waybar" ]; }
             {
               command = [
                 "swaybg"
@@ -142,6 +128,17 @@
               color = "#130166";
             };
           };
+          window-rules = [
+            {
+              geometry-corner-radius = {
+                bottom-left = 10.5;
+                bottom-right = 10.5;
+                top-left = 10.5;
+                top-right = 10.5;
+              };
+              clip-to-geometry = true;
+            }
+          ];
           environment = {
             XDG_CURRENT_DESKTOP = "niri";
           };
@@ -162,89 +159,99 @@
               };
             };
           };
+          cursor = {
+            size = 24;
+            theme = "Bibata-Modern-Classic";
+          };
           binds = {
             "Alt+Q".action.spawn = [ "kitty" ];
             "Alt+Backspace".action.close-window = [ ];
             "Alt+Return".action.maximize-window-to-edges = [ ];
             "Alt+Shift+Return".action.fullscreen-window = [ ];
+
             "XF86AudioRaiseVolume" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "audio"
-                "increment"
-                "3"
+                # I think @DEFAULT_SINK@ acts as a var or identifier for wpctl, means to access the default audio input device (being called a sink)
+                # wpctl is a CLI for the PipeWire session manager WirePlumber
+                "wpctl"
+                "set-volume"
+                "@DEFAULT_SINK@"
+                ".05+"
               ];
             };
             "XF86AudioLowerVolume" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "audio"
-                "decrement"
-                "3"
+                "wpctl"
+                "set-volume"
+                "@DEFAULT_SINK@"
+                ".05-"
               ];
             };
+
             "XF86AudioMute" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "audio"
-                "mute"
+                "wpctl"
+                "set-mute"
+                "@DEFAULT_SINK@"
+                "toggle"
               ];
             };
+
             "XF86AudioMicMute" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "audio"
-                "micmute"
+                "wpctl"
+                "set-mute"
+                "@DEFAULT_SOURCE@"
+                "toggle"
               ];
             };
+
             "XF86MonBrightnessUp" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "brightness"
-                "increment"
-                "5"
+                "brightncessctl"
+                "s"
+                "+5%"
               ];
             };
+
             "XF86MonBrightnessDown" = {
               allow-when-locked = true;
               action.spawn = [
-                "dms"
-                "ipc"
-                "call"
-                "brightness"
-                "decrement"
-                "5"
+                "brightncessctl"
+                "s"
+                "5%-"
               ];
             };
-            "Mod+Left".action.focus-column-left = [ ];
-            "Mod+Down".action.focus-window-down = [ ];
-            "Mod+Up".action.focus-window-up = [ ];
-            "Mod+Right".action.focus-column-right = [ ];
 
-            "Mod+Shift+Left".action.move-column-left = [ ];
-            "Mod+Shift+Down".action.move-window-down = [ ];
-            "Mod+Shift+Up".action.move-window-up = [ ];
-            "Mod+Shift+Right".action.move-column-right = [ ];
+            # Window navigation
+            "Alt+H".action.focus-column-left = [ ];
+            "Alt+J".action.focus-window-down = [ ];
+            "Alt+K".action.focus-window-up = [ ];
+            "Alt+L".action.focus-column-right = [ ];
 
-            "Alt+Shift+Left".action.set-column-width = [ "-10%" ];
-            "Alt+Shift+Right".action.set-column-width = [ "+10%" ];
-            "Alt+Shift+Up".action.set-window-height = [ "-10%" ];
-            "Alt+Shift+Down".action.set-window-height = [ "+10%" ];
+            # Moving windows
+            "Alt+Shift+H".action.move-column-left = [ ];
+            "Alt+Shift+J".action.move-window-down = [ ];
+            "Alt+Shift+K".action.move-window-up = [ ];
+            "Alt+Shift+L".action.move-column-right = [ ];
+
+            # Resizing windows
+            "Alt+Ctrl+H".action.set-column-width = [ "-10%" ];
+            "Alt+Ctrl+J".action.set-window-height = [ "+10%" ];
+            "Alt+Ctrl+K".action.set-window-height = [ "-10%" ];
+            "Alt+Ctrl+L".action.set-column-width = [ "+10%" ];
+
+            # Workspaces
+            "Mod+J".action.focus-workspace-down = [ ];
+            "Mod+K".action.focus-workspace-up = [ ];
+            "Shift+Mod+J".action.move-workspace-down = [ ];
+            "Shift+Mod+K".action.move-workspace-up = [ ];
+            "Mod+Return".action.toggle-overview = [ ];
 
             "Print".action.spawn = [
               "dms"
@@ -257,6 +264,10 @@
             ];
 
             "Alt+R".action.spawn = [ "fuzzel" ];
+            "Alt+E".action.spawn = [
+              "kitty"
+              "yazi"
+            ];
           };
         };
       };

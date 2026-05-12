@@ -9,26 +9,6 @@
     };
   };
 
-  # kitty
-  programs.kitty = {
-    enable = true;
-    settings = {
-      confirm_os_window_close = 0;
-      enable_audio_bell = false;
-      mouse_hide_wait = "-1.0";
-      font-family = "NotoMono Nerd Font";
-      scrollback_lines = 5000;
-      remember_window_size = "no";
-      initial_window_width = 800;
-      initial_window_height = 400;
-      linux_display_server = "wayland";
-      tab_bar_style = "powerline";
-      include = "~/.config/nixos-config/resources/Kaolin Ocean.conf";
-      #sync_to_monitor = "yes";
-      repaint_delay = 5;
-    };
-  };
-
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
@@ -42,13 +22,19 @@
   programs.fuzzel = {
     enable = true;
     settings = {
-      #placeholder = "peepee";
-      /*
-        font = {
-                name = "NotoMono Nerd Font";
-                size = 20;
-        };
-      */
+      main = {
+        font = "NotoMono Nerd Font:size=15";
+        terminal = "kitty"; # {cmd} will be implicitly appended
+        anchor = "center";
+        lines = 5;
+      };
+      colors = {
+        # RGBA [ RR GG BB AA ]
+        background = "0a0a1ed9";
+      };
+      border = {
+        width = 3;
+      };
     };
 
   };

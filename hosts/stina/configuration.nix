@@ -7,8 +7,28 @@
       enable = true;
       device = "/dev/sda";
       useOSProber = true;
-      timeoutStyle = "hidden";
     };
+    plymouth = {
+      enable = true;
+      theme = "rings";
+      themePackages = with pkgs; [
+        # By default we would install all themes
+        (adi1090x-plymouth-themes.override { selected_themes = [ "rings" ]; })
+      ];
+    };
+
+    # Enable "Silent boot"
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "udev.log_level=3"
+      "systemd.show_status=auto"
+    ];
+    # Hide the OS choice for bootloaders.
+    # It's still possible to open the bootloader list by pressing any key
+    # It will just not appear on screen unless a key is pressed
+    loader.timeout = 0;
   };
 
   nix = {
@@ -59,8 +79,22 @@
 
   };
 
+  console.keyMap = "de";
+
   # Services
   services = {
+    # Enable the X11 windowing system.
+    xserver = {
+      enable = true;
+      # Configure keymap in X11
+      xkb = {
+        layout = "at";
+        variant = "";
+      };
+      # excludePackages = with pkgs; [ xterm ];
+      # Intel (???)
+      videoDrivers = [ "modesetting" ];
+    };
     # Enable CUPS to print documents.
     printing.enable = true;
     # Enable sound with pipewire.
@@ -91,8 +125,6 @@
   # home-manager
   home-manager.backupFileExtension = "hmb";
 
-  #programs.niri.enable = true;
-  #programs.niri.package = pkgs.niri;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

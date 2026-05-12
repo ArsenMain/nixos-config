@@ -11,10 +11,4 @@ Using VSCodium. Either way, not all plugins can be installed via the config. Mis
 - C# dev environment. Manually installing DotRush
 
 ## Customisation
-Until I get the dms-shell home-manager module to work, configurations like the wallpaper still need to be done manually
-config 
-* Dank Bar - Font scale + Icon scale: 110%
-* Dank Bar - Center section only has clock
-* Disable animations etc.
-* Wallpaper -> inland.webp
-OR I drop dms 
+DMS dropped lololololol

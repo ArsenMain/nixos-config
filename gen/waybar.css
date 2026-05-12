@@ -1,0 +1,27 @@
+* {
+        font-family: NotoMono Nerd Font;
+        font-size: 25px;
+        color: white;
+}
+window#waybar {
+        background-color: black;
+}
+#battery {
+        font-size: 19px;
+        padding-left: 20px;
+        padding-right: 20px;
+}
+#network {
+        padding-left: 20px;
+        padding-right: 20px;
+}
+#pulseaudio-slider {
+        color: #1A1826;
+        min-width: 50px;
+}
+#pulseaudio-slider slider {}
+#pulseaudio {
+        min-width: 85px;
+        font-size: 19px;
+}
+
