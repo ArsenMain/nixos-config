@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  # Environment variables
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
   # Bootloader.
   boot = {
     loader.grub = {
@@ -43,13 +48,10 @@
 
   nixpkgs.config = {
     # 25.11
-    /*
-      permittedInsecurePackages = [
-        "ciscoPacketTracer8-8.2.2"
-      ];
-    */
+    #permittedInsecurePackages = [ "ciscoPacketTracer8-8.2.2" ];
+
     # unstable
-    permittedInsecurePackages = [ "cisco-packet-tracer-8.2.2" ];
+    #permittedInsecurePackages = [ "cisco-packet-tracer-8.2.2" ];
     allowUnfree = true;
   };
 
@@ -123,6 +125,7 @@
   fonts.packages = with pkgs; [ nerd-fonts.noto ];
 
   # home-manager
+  # for any config files that would get overriden, we modify the file with the .hmb extension
   home-manager.backupFileExtension = "hmb";
 
   # Some programs need SUID wrappers, can be configured further or are

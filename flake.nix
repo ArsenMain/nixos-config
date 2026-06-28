@@ -18,8 +18,8 @@
   };
 
   outputs =
+  # Since more attributes than are expected can be passed here [variadic] we name the attribute set inputs with the @inputs syntax, being able to access any given but not explicitly named atributes
     {
-      self,
       nixpkgs,
       home-manager,
       nvf,
@@ -31,17 +31,35 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/stina
+          ./gen
+          nvf.nixosModules.default
+          niri.nixosModules.niri
           home-manager.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.lily = ./hosts/stina/home.nix;
+              users.lily.home.stateVersion = "25.11";
             };
           }
+        ];
+      };
+
+      nixosConfigurations.missabuse = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/missabuse
+          ./gen
           nvf.nixosModules.default
           niri.nixosModules.niri
-          ./gen/default.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.lily.home.stateVersion = "25.11";
+            };
+          }
         ];
       };
     };

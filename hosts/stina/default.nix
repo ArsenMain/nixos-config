@@ -1,8 +1,6 @@
-{ ... }:
-{
+{ ... }: {
   imports = [
     ./configuration.nix
-    ./firefox.nix
     ./iris.nix
     ./pkgs.nix
     ./mysql.nix
@@ -11,5 +9,11 @@
     ./hardware-configuration.nix
     ./yazi.nix
     ./kitty.nix
+    ./fuzzel.nix
+    ./feedr.nix
+    ./git.nix
+    ./vsc.nix
+    ./mako.nix
+    ./vesktop.nix
   ];
 }

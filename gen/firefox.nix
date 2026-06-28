@@ -5,7 +5,7 @@
     policies = {
       DisableFirefoxScreenshots = true;
       DisableFirefoxStudies = true;
-      #PromptForDownloadLocation = true;
+      PromptForDownloadLocation = true;
       PasswordManagerEnabled = false;
       GenerativeAI.Enabled = false;
       FirefoxSuggest.SponsoredSuggestions = false;

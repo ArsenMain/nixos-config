@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{ lib, ... }: {
   home-manager.users.lily = {
     # Scuffed fix to have waybar service start correctly
     systemd.user.services.waybar.Unit.ConditionEnvironment = lib.mkForce "";
@@ -10,47 +9,88 @@
         systemd.enable = true;
         settings = {
           mainBar = {
-            position = "top";
-            layer = "top";
-            height = 35;
-
-            modules-left = [ "network" ];
-            modules-center = [ "clock" ];
-            modules-right = [
-              "pulseaudio/slider"
-              "pulseaudio"
-              "battery"
+            "layer" = "top";
+            "position" = "top";
+            "modules-left" = [
+              "cpu"
+              "memory"
+              "network"
             ];
 
-            clock = {
-              format-alt = "{:%d. %b}";
+            "modules-center" = [ "clock" ];
+
+            "modules-right" = [
+              "pulseaudio"
+              "battery"
+              "tray"
+              "custom/lock"
+              "custom/power"
+            ];
+
+            "hyprland/workspaces" = {
+              "format" = "{name}: {icon}";
+              "format-icons" = {
+                "active" = "";
+                "default" = "";
+              };
             };
 
-            network = {
-              format-wifi = " ";
-              format-ethernet = "󰈀 ";
-              format-disconnected = " ";
+            "tray" = {
+              "icon-size" = 16;
+              "spacing" = 10;
             };
-            battery = {
-              format = "{capacity}%";
-              format-charging = " {capacity}%";
-              format-full = "  {capacity}%";
+
+            "clock" = {
+              "timezone" = "Europe/Vienna";
+              "tooltip-format" = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+              "format" = "{:%d/%m/%Y - %H:%M:%S}";
+              "interval" = 1;
             };
-            "pulseaudio/slider" = {
-              "format" = "{volume}%";
-              "format-muted" = " MUTE";
-              "step" = 5;
+
+            "network" = {
+              "format-wifi" = "󰤢 {bandwidthDownBits}";
+              "format-ethernet" = "󰈀 {bandwidthDownBits}";
+              "format-disconnected" = "󰤠 No Network";
+              "interval" = 5;
               "tooltip" = false;
             };
-            pulseaudio = {
-              "format" = "{volume}% {icon}";
-              "format-muted" = " {format_source}";
+
+            "cpu" = {
+              "interval" = 1;
+              "format" = "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%";
+              "format-icons" = [
+                "▁"
+                "▂"
+                "▃"
+                "▄"
+                "▅"
+                "▆"
+                "▇"
+                "█"
+              ];
+            };
+
+            "memory" = {
+              "interval" = 30;
+              "format" = "  {used:0.1f}G/{total:0.1f}G";
+            };
+
+            "pulseaudio" = {
+              "format" = "{icon} {volume}%";
+              "format-muted" = "";
               "format-icons" = {
                 "default" = [
                   ""
                   ""
+                  " "
                 ];
               };
+            };
+
+            "custom/power" = {
+              "tooltip" = false;
+              "on-click" = "wlogout &";
+              "format" = "⏻";
             };
           };
         };

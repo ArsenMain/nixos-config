@@ -1,5 +1,4 @@
-{ pkgs, inputs, ... }:
-{
+{ pkgs, inputs, ... }: {
   environment.systemPackages = with pkgs; [
     swaybg
     bibata-cursors
@@ -7,12 +6,6 @@
   services.displayManager.ly = {
     enable = true;
     settings = {
-      /*
-        animation = "gameoflife";
-        gameoflife_fg = "0xff0a0ad9";
-        animation_frame_delay = 5;
-        animation_timeout_sec = 0;
-      */
       battery_id = "BAT0";
       bigclock = "en";
       bigclock_12hr = false;
@@ -43,6 +36,9 @@
     systemd.user.services = {
     };
   */
+
+  # For XDG portal integration
+  # environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   home-manager.users.lily = {
 
@@ -111,11 +107,11 @@
             };
             border = {
               enable = true;
-              width = 2;
+              width = 1;
             };
             focus-ring = {
               enable = true;
-              width = 2;
+              width = 1;
             };
             shadow = {
               enable = true;
@@ -125,7 +121,7 @@
                 x = 0;
                 y = 5;
               };
-              color = "#130166";
+              color = "#000000";
             };
           };
           window-rules = [

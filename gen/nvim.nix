@@ -1,5 +1,4 @@
-{ ... }:
-{
+{ ... }: {
   programs.nvf = {
     enable = true;
     settings = {
@@ -89,7 +88,7 @@
             lsp.enable = true;
             format.enable = true;
           };
-          ts = {
+          typescript = {
             enable = true;
             lsp.enable = true;
             format.enable = true;
