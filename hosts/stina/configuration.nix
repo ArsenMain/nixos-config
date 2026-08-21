@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Environment variables
@@ -123,6 +123,9 @@
 
   # Fonts
   fonts.packages = with pkgs; [ nerd-fonts.noto ];
+
+
+  services.gnome.gnome-keyring.enable = lib.mkForce false;
 
   # home-manager
   # for any config files that would get overriden, we modify the file with the .hmb extension

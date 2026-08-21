@@ -1,5 +1,4 @@
-{ ... }:
-{
+{ ... }: {
   programs.firefox = {
     enable = true;
     policies = {
@@ -43,7 +42,6 @@
           installation_mode = "force_installed";
           private_browsing = true;
         };
-
       };
     };
   };

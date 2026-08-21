@@ -1,8 +1,9 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, lib, ... }: {
   environment.systemPackages = with pkgs; [
     swaybg
     bibata-cursors
   ];
+  # ly
   services.displayManager.ly = {
     enable = true;
     settings = {
@@ -12,6 +13,7 @@
       clear_password = true;
     };
   };
+
   nixpkgs.overlays = [ inputs.niri.overlays.niri ];
 
   programs = {
@@ -40,29 +42,67 @@
   # For XDG portal integration
   # environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
-  home-manager.users.lily = {
+  # XDG portal integration
+  xdg = {
+    portal = {
+      enable = true;
+      # Force this config to remove the gnome portal from extraPortals -> this fixes the slow startup issue with waybar and co.
+      extraPortals = with pkgs; lib.mkForce [ xdg-desktop-portal-termfilechooser xdg-desktop-portal-gtk ];
+      config = {
+        common = {
+          default = [ "*" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+        };
+      };
+      xdgOpenUsePortal = true;
+    };
+    /*configFile."xdg-desktop-portal-termfilechooser/config" = {
+      text = ''
+        [filechooser]
+        cmd=$HOME/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+      '';
+    };*/
+  };
 
-    # XDG portal integration
-    xdg = {
-      portal = {
+  home-manager.users.lily = {
+    services.swayidle = {
+      enable = true;
+      timeouts = [
+        {
+          timeout = 180;
+          command = "${pkgs.hyprlock}/bin/hyprlock";
+        }
+      ];
+    };
+
+    programs = {
+      # hyprlock
+      hyprlock = {
         enable = true;
-        extraPortals = with pkgs; [ xdg-desktop-portal-termfilechooser ];
-        config = {
-          common = {
-            default = [ "*" ];
-            "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+        settings = {
+          general = {
+            ignore_empty_input = true;
+          };
+          input-field = {
+            outer_color = "rgb(11, 6, 28)";
+            inner_color = "rgb(255, 255, 255)";
+            capslock_color = "rgb(155, 155, 155)";
+            fade_on_empty = false;
+            dots_center = true;
+            hide_input = false;
+            rounding = -1;
+            outline_thickness = 0;
+            placeholder_text = "<i>be honest</i>";
+            font_family = "NotoMono Nerd Font";
+            # lol
+            dots_text_format = "UwU";
+          };
+          background = {
+            path = "screenshot";
+            blur_passes = 2;
           };
         };
-        xdgOpenUsePortal = true;
       };
-      configFile."xdg-desktop-portal-termfilechooser/config" = {
-        text = ''
-          [filechooser]
-          cmd=$HOME/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
-        '';
-      };
-    };
-    programs = {
       # niri
       niri = {
         settings = {
@@ -76,6 +116,9 @@
             }
           ];
           gestures.hot-corners.enable = false;
+          switch-events = {
+
+          };
           input = {
             keyboard = {
               xkb = {
@@ -107,11 +150,12 @@
             };
             border = {
               enable = true;
-              width = 1;
+              width = 2;
+              active.color = "#ffffff";
+              inactive.color = "#101010";
             };
             focus-ring = {
-              enable = true;
-              width = 1;
+              enable = false;
             };
             shadow = {
               enable = true;
@@ -158,6 +202,13 @@
           cursor = {
             size = 24;
             theme = "Bibata-Modern-Classic";
+          };
+          switch-events = {
+            lid-close.action.spawn = [
+              "systemctl"
+              "suspend"
+            ];
+            lid-open.action.spawn = [ "hyprlock" ];
           };
           binds = {
             "Alt+Q".action.spawn = [ "kitty" ];
@@ -245,9 +296,29 @@
             # Workspaces
             "Mod+J".action.focus-workspace-down = [ ];
             "Mod+K".action.focus-workspace-up = [ ];
-            "Shift+Mod+J".action.move-workspace-down = [ ];
-            "Shift+Mod+K".action.move-workspace-up = [ ];
+            "Shift+Mod+J".action.move-window-to-workspace-down = [ ];
+            "Shift+Mod+K".action.move-window-to-workspace-up = [ ];
             "Mod+Return".action.toggle-overview = [ ];
+
+            "Mod+1".action.focus-workspace = [ 1 ];
+            "Mod+2".action.focus-workspace = [ 2 ];
+            "Mod+3".action.focus-workspace = [ 3 ];
+            "Mod+4".action.focus-workspace = [ 4 ];
+            "Mod+5".action.focus-workspace = [ 5 ];
+            "Mod+6".action.focus-workspace = [ 6 ];
+            "Mod+7".action.focus-workspace = [ 7 ];
+            "Mod+8".action.focus-workspace = [ 8 ];
+            "Mod+9".action.focus-workspace = [ 9 ];
+
+            "Mod+Shift+1".action.move-window-to-workspace = [ 1 ];
+            "Mod+Shift+2".action.move-window-to-workspace = [ 2 ];
+            "Mod+Shift+3".action.move-window-to-workspace = [ 3 ];
+            "Mod+Shift+4".action.move-window-to-workspace = [ 4 ];
+            "Mod+Shift+5".action.move-window-to-workspace = [ 5 ];
+            "Mod+Shift+6".action.move-window-to-workspace = [ 6 ];
+            "Mod+Shift+7".action.move-window-to-workspace = [ 7 ];
+            "Mod+Shift+8".action.move-window-to-workspace = [ 8 ];
+            "Mod+Shift+9".action.move-window-to-workspace = [ 9 ];
 
             "Print".action.spawn = [
               "dms"
@@ -264,6 +335,12 @@
               "kitty"
               "yazi"
             ];
+
+            "Mod+L".action.spawn = [ "hyprlock" ];
+          };
+
+          overview = {
+            backdrop-color = "#000000";
           };
         };
       };

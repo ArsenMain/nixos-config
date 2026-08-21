@@ -18,7 +18,7 @@
   };
 
   outputs =
-  # Since more attributes than are expected can be passed here [variadic] we name the attribute set inputs with the @inputs syntax, being able to access any given but not explicitly named atributes
+    # Since more attributes than are expected can be passed here [variadic] we name the attribute set inputs with the @inputs syntax, being able to access any given but not explicitly named atributes
     {
       nixpkgs,
       home-manager,

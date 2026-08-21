@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   home-manager.users.lily.programs.vscodium = {
     enable = true;
     package = pkgs.vscodium;

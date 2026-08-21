@@ -1,7 +1,5 @@
-{ lib, ... }: {
+{ ... }: {
   home-manager.users.lily = {
-    # Scuffed fix to have waybar service start correctly
-    systemd.user.services.waybar.Unit.ConditionEnvironment = lib.mkForce "";
     programs = {
       # waybar
       waybar = {
@@ -23,8 +21,7 @@
               "pulseaudio"
               "battery"
               "tray"
-              "custom/lock"
-              "custom/power"
+              "niri/workspaces"
             ];
 
             "hyprland/workspaces" = {
@@ -87,11 +84,10 @@
               };
             };
 
-            "custom/power" = {
-              "tooltip" = false;
-              "on-click" = "wlogout &";
-              "format" = "⏻";
+            "niri/workspaces" = {
+              "disable-click" = true;
             };
+
           };
         };
         style = ./waybar.css;

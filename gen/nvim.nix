@@ -33,7 +33,8 @@
         options = {
           wrap = false;
           autoindent = true;
-          tabstop = 4;
+          tabstop = 2;
+          shiftwidth = 2;
         };
 
         clipboard = {
@@ -190,6 +191,7 @@
             action = "0";
           }
         ];
+        undoFile.enable = true;
       };
     };
   };
