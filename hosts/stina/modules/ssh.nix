@@ -1,5 +1,6 @@
 {
   programs.ssh = {
+    enableAskPassword = false;
     extraConfig = ''
       Host home
         User git
