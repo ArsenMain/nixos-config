@@ -1,4 +1,4 @@
-_: {
+{
   home-manager.users.lily.programs.git = {
     enable = true;
     settings.user = {

@@ -41,7 +41,7 @@
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  libxcb-wm
+  libxcb-wm,
 }:
 
 let
@@ -53,8 +53,7 @@ let
     src = fetchurl {
       url = "https://www.netacad.com/authoring-resources/courses/ff9e491c-49be-4734-803e-a79e6e83dab1/c3636211-1ce6-4f92-8a22-ccddf902dd72/en-US/assets/PacketTracer822_amd64_signed_en-US_35234a27-3127-49bc-91ce-2926af76f07a.deb";
       sha256 = "bNK4iR35LSyti2/cR0gPwIneCFxPP+leuA1UUKKn9y0=";
-  };
-
+    };
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -131,9 +130,7 @@ stdenvNoCC.mkDerivation {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
@@ -170,9 +167,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://www.netacad.com/courses/packet-tracer";
     license = lib.licenses.unfree;
     mainProgram = "packettracer8";
-    maintainers = with lib.maintainers; [
-      gepbird
-    ];
+    maintainers = with lib.maintainers; [ gepbird ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

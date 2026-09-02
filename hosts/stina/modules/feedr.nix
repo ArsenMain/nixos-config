@@ -1,4 +1,4 @@
-_: {
+{
   home-manager.users.lily.programs.feedr = {
     enable = true;
     settings = {

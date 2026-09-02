@@ -21,7 +21,7 @@
 #network,
 #cpu,
 #memory {
-  background-color: #101010;
+  background-color: black;
   padding: 0.5rem 1rem;
   margin: 5px 0;
 }
@@ -43,14 +43,17 @@
 
 #workspaces button {
   color: white; 
+  padding-bottom: 3px;
 }
 
 #workspaces button.focused {
-  color: #101010; 
+  color: black; 
   background-color: white;
+  padding-bottom: 3px;
 }
 
 #workspaces button.urgent {
   color: white; 
   font-style: italic;
+  padding-bottom: 3px;
 }

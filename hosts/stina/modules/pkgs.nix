@@ -1,13 +1,14 @@
 { pkgs, ... }: {
   users.users.lily.packages = with pkgs; [
     nixfmt
-    (pkgs.callPackage ./pt.nix {})
+    (pkgs.callPackage ../pkgs/pt.nix { })
     pgadmin4-desktopmode
     dbeaver-bin
     dotnetCorePackages.sdk_9_0_1xx
     mysql-workbench
     gimp2
     libreoffice-qt
+    inkscape
   ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -32,6 +33,9 @@
     pulseaudio
     bitwarden-cli
     ripgrep
+    hyprshot
+    zathura
+    mpv
   ];
   # Dotnet (look at systemPkgs)
   programs.nix-ld.enable = true;

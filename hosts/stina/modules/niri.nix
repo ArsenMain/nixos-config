@@ -1,6 +1,11 @@
-{ pkgs, inputs, lib, ... }: {
+{
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
+{
   environment.systemPackages = with pkgs; [
-    swaybg
     bibata-cursors
   ];
   # ly
@@ -33,21 +38,17 @@
   # Authentication agent needed
   security.polkit.enable = true;
 
-  /*
-    # Set up additional programs as systemd services (waybar, swaybg, ...)
-    systemd.user.services = {
-    };
-  */
-
-  # For XDG portal integration
-  # environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
-
   # XDG portal integration
   xdg = {
     portal = {
       enable = true;
       # Force this config to remove the gnome portal from extraPortals -> this fixes the slow startup issue with waybar and co.
-      extraPortals = with pkgs; lib.mkForce [ xdg-desktop-portal-termfilechooser xdg-desktop-portal-gtk ];
+      extraPortals =
+        with pkgs;
+        lib.mkForce [
+          xdg-desktop-portal-termfilechooser
+          # xdg-desktop-portal-gtk
+        ];
       config = {
         common = {
           default = [ "*" ];
@@ -56,23 +57,28 @@
       };
       xdgOpenUsePortal = true;
     };
-    /*configFile."xdg-desktop-portal-termfilechooser/config" = {
-      text = ''
-        [filechooser]
-        cmd=$HOME/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
-      '';
-    };*/
   };
 
   home-manager.users.lily = {
-    services.swayidle = {
-      enable = true;
-      timeouts = [
-        {
-          timeout = 180;
-          command = "${pkgs.hyprlock}/bin/hyprlock";
-        }
-      ];
+    services = {
+      wpaperd = {
+        enable = true;
+        settings = {
+          eDP-1 = {
+            path = "~/.config/nixos-config/hosts/stina/resources/inland.webp";
+          };
+        };
+      };
+
+      swayidle = {
+        enable = true;
+        timeouts = [
+          {
+            timeout = 180;
+            command = "${pkgs.hyprlock}/bin/hyprlock";
+          }
+        ];
+      };
     };
 
     programs = {
@@ -84,42 +90,66 @@
             ignore_empty_input = true;
           };
           input-field = {
-            outer_color = "rgb(11, 6, 28)";
-            inner_color = "rgb(255, 255, 255)";
-            capslock_color = "rgb(155, 155, 155)";
+            outer_color = "rgba(0, 0, 0, 0)";
+            inner_color = "rgba(0, 0, 0, 0)";
+            capslock_color = "rgba(0, 0, 0, 0)";
+            check_color = "rgba(0, 0, 0, 0)";
+            fail_color = "rgba(0, 0, 0, 0)";
             fade_on_empty = false;
             dots_center = true;
             hide_input = false;
             rounding = -1;
             outline_thickness = 0;
-            placeholder_text = "<i>be honest</i>";
+            placeholder_text = "<i>...</i>";
             font_family = "NotoMono Nerd Font";
-            # lol
-            dots_text_format = "UwU";
+            font_color = "rgb(255, 255, 255)";
+            dots_text_format = "|";
           };
           background = {
             path = "screenshot";
-            blur_passes = 2;
+            blur_passes = 8;
           };
         };
       };
       # niri
       niri = {
         settings = {
-          spawn-at-startup = [
-            {
-              command = [
-                "swaybg"
-                "-i"
-                "/home/lily/.config/nixos-config/resources/inland.webp"
-              ];
-            }
-          ];
-          gestures.hot-corners.enable = false;
-          switch-events = {
-
+          recent-windows = {
+            highlight = {
+              active-color = "#ffffff";
+              padding = 10;
+              corner-radius = 5;
+            };
           };
+          outputs = {
+            HDMI-A-1 = {
+              enable = true;
+              mode = {
+                width = 1920;
+                height = 1080;
+                refresh = 60.00;
+              };
+              position = {
+                x = 1920;
+                y = 0;
+              };
+            };
+            eDP-1 = {
+              enable = true;
+              mode = {
+                height = 1080;
+                width = 1920;
+                refresh = 60.003;
+              };
+              position = {
+                x = 0;
+                y = 0;
+              };
+            };
+          };
+          gestures.hot-corners.enable = false;
           input = {
+            power-key-handling.enable = false;
             keyboard = {
               xkb = {
                 layout = "at";
@@ -178,6 +208,36 @@
               };
               clip-to-geometry = true;
             }
+            # I've tried getting this to work
+            # But I believe that it doesn't actually start yazi with that title
+            # open-floating only applies when the windo was opened sooo
+            /*{
+              matches = [
+                {
+                  title = "yazi.*";
+                  app-id = "kitty";
+                }
+              ];
+              open-floating = true;
+            }*/
+            {
+              matches = [
+                {
+                  title = "Change.*Colour";
+                  app-id = "Gimp.*";
+                }
+              ];
+              open-floating = true;
+            }
+            {
+              matches = [
+                {
+                  title = "Quit GIMP";
+                  app-id = "Gimp.*";
+                }
+              ];
+              open-floating = true;
+            }
           ];
           environment = {
             XDG_CURRENT_DESKTOP = "niri";
@@ -185,7 +245,6 @@
 
           hotkey-overlay.skip-at-startup = true;
           prefer-no-csd = true;
-          screenshot-path = "~/Pictures/Screenshots/%Y-%m-%d %H-%M-%S.png";
           animations = {
             enable = true;
             workspace-switch = {
@@ -212,6 +271,10 @@
           };
           binds = {
             "Alt+Q".action.spawn = [ "kitty" ];
+            "Alt+E".action.spawn = [
+              "kitty"
+              "yazi"
+            ];
             "Alt+Backspace".action.close-window = [ ];
             "Alt+Return".action.maximize-window-to-edges = [ ];
             "Alt+Shift+Return".action.fullscreen-window = [ ];
@@ -225,6 +288,8 @@
                 "set-volume"
                 "@DEFAULT_SINK@"
                 ".05+"
+                "-l"
+                "1"
               ];
             };
             "XF86AudioLowerVolume" = {
@@ -234,6 +299,8 @@
                 "set-volume"
                 "@DEFAULT_SINK@"
                 ".05-"
+                "-l"
+                "1"
               ];
             };
 
@@ -321,22 +388,20 @@
             "Mod+Shift+9".action.move-window-to-workspace = [ 9 ];
 
             "Print".action.spawn = [
-              "dms"
-              "screenshot"
+              "hyprshot"
+              "-m"
+              "region"
             ];
             "Ctrl+Print".action.spawn = [
-              "dms"
-              "screenshot"
-              "--no-file"
+              "hyprshot"
+              "--clipboard-only"
+              "-m"
+              "region"
             ];
 
             "Alt+R".action.spawn = [ "fuzzel" ];
-            "Alt+E".action.spawn = [
-              "kitty"
-              "yazi"
-            ];
 
-            "Mod+L".action.spawn = [ "hyprlock" ];
+            "Mod+Shift+L".action.spawn = [ "hyprlock" ];
           };
 
           overview = {

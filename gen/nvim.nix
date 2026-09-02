@@ -1,10 +1,11 @@
-{ ... }: {
+{
   programs.nvf = {
     enable = true;
     settings = {
       vim = {
         viAlias = false;
         vimAlias = true;
+        searchCase = "smart";
         autocmds = [
           {
             enable = true;

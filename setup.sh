@@ -10,5 +10,5 @@ if [[ ! -d $FULL_PATH ]]; then
         cp -r ./* "$FULL_PATH"
         rm -rf ./*
         sudo rm /etc/nixos/configuration.nix
-        sudo ln -s /etc/nixos/flake.nix "$FULL_PATH""flake.nix"
+        sudo ln -s "$FULL_PATH""flake.nix" /etc/nixos/flake.nix 
 fi

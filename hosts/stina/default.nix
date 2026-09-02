@@ -1,19 +1,13 @@
-{ ... }: {
-  imports = [
-    ./configuration.nix
-    ./iris.nix
-    ./pkgs.nix
-    ./mysql.nix
-    ./postgres.nix
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./yazi.nix
-    ./kitty.nix
-    ./fuzzel.nix
-    ./feedr.nix
-    ./git.nix
-    ./vsc.nix
-    ./mako.nix
-    ./vesktop.nix
-  ];
+# https://discourse.nixos.org/t/a-cool-function-to-import-nix-modules-automatically/62757
+# Courtesy of waffle8946 x3
+{ lib, ... }:
+let
+  inherit (builtins) filter map toString;
+  inherit (lib.filesystem) listFilesRecursive;
+  inherit (lib.strings) hasSuffix;
+in
+{
+  imports = filter (hasSuffix ".nix") (
+    map toString (filter (p: p != ./default.nix) (listFilesRecursive ./modules/.))
+  );
 }

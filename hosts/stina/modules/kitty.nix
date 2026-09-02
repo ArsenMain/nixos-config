@@ -1,4 +1,4 @@
-{ ... }: {
+{
   home-manager.users.lily.programs.kitty = {
     enable = true;
     settings = {
@@ -12,7 +12,6 @@
       initial_window_height = 400;
       linux_display_server = "wayland";
       tab_bar_style = "powerline";
-      #include = "~/.config/nixos-config/resources/Kaolin Ocean.conf";
       repaint_delay = 5;
       # All following configs are taken over from the Kaolin Ocean theme
       foreground = "#e6e6e8";

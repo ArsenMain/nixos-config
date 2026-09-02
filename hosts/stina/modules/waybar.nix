@@ -1,4 +1,4 @@
-{ ... }: {
+{
   home-manager.users.lily = {
     programs = {
       # waybar
@@ -82,6 +82,7 @@
                   " "
                 ];
               };
+              "max-volume" = 100;
             };
 
             "niri/workspaces" = {
@@ -90,7 +91,7 @@
 
           };
         };
-        style = ./waybar.css;
+        style = ../resources/waybar.css;
       };
     };
   };

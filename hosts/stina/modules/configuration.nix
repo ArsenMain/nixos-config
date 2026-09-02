@@ -6,35 +6,6 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
-  # Bootloader.
-  boot = {
-    loader.grub = {
-      enable = true;
-      device = "/dev/sda";
-      useOSProber = true;
-    };
-    plymouth = {
-      enable = true;
-      theme = "rings";
-      themePackages = with pkgs; [
-        # By default we would install all themes
-        (adi1090x-plymouth-themes.override { selected_themes = [ "rings" ]; })
-      ];
-    };
-
-    # Enable "Silent boot"
-    consoleLogLevel = 3;
-    initrd.verbose = false;
-    kernelParams = [
-      "quiet"
-      "udev.log_level=3"
-      "systemd.show_status=auto"
-    ];
-    # Hide the OS choice for bootloaders.
-    # It's still possible to open the bootloader list by pressing any key
-    # It will just not appear on screen unless a key is pressed
-    loader.timeout = 0;
-  };
 
   nix = {
     # Enable flakes
@@ -44,14 +15,15 @@
     ];
     # Storage optimisation
     optimise.automatic = true;
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 10d";
+    };
   };
 
   nixpkgs.config = {
-    # 25.11
-    #permittedInsecurePackages = [ "ciscoPacketTracer8-8.2.2" ];
-
-    # unstable
-    #permittedInsecurePackages = [ "cisco-packet-tracer-8.2.2" ];
     allowUnfree = true;
   };
 
@@ -85,18 +57,6 @@
 
   # Services
   services = {
-    # Enable the X11 windowing system.
-    xserver = {
-      enable = true;
-      # Configure keymap in X11
-      xkb = {
-        layout = "at";
-        variant = "";
-      };
-      # excludePackages = with pkgs; [ xterm ];
-      # Intel (???)
-      videoDrivers = [ "modesetting" ];
-    };
     # Enable CUPS to print documents.
     printing.enable = true;
     # Enable sound with pipewire.
@@ -124,29 +84,11 @@
   # Fonts
   fonts.packages = with pkgs; [ nerd-fonts.noto ];
 
-
   services.gnome.gnome-keyring.enable = lib.mkForce false;
 
   # home-manager
   # for any config files that would get overriden, we modify the file with the .hmb extension
   home-manager.backupFileExtension = "hmb";
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -155,5 +97,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }

@@ -1,4 +1,4 @@
-_: {
+{
   home-manager.users.lily.services.mako = {
     enable = true;
     settings = {
@@ -8,7 +8,7 @@ _: {
       border-color = "#FFFFFF";
       markup = true;
       max-icon-size = 32;
-      default-timeout = 3000;
+      default-timeout = 5000;
     };
   };
 }
