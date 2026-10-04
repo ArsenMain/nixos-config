@@ -8,6 +8,15 @@
   environment.systemPackages = with pkgs; [
     bibata-cursors
   ];
+
+  # logind
+  services.logind = {
+    enable = true;
+    settings.Login = {
+      HandlePowerKey = "poweroff";
+    };
+  };
+
   # ly
   services.displayManager.ly = {
     enable = true;
@@ -33,6 +42,7 @@
     # These environment variables set using portals for older (GTK_USE_PORTAL) and newer (GDK_DEBUG) apps
     GTK_USE_PORTAL = "1"; # legacy
     GDK_DEBUG = "portals"; # termfilechooser
+    QT_QPA_PLATFORMTHEME = "xdgdesktopportal";
   };
 
   # Authentication agent needed
@@ -42,78 +52,167 @@
   xdg = {
     portal = {
       enable = true;
+      wlr = {
+        enable = true;
+        settings = {
+          screencast = {
+            output_name = "eDP-1";
+            chooser_type = "simple";
+            chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
+          };
+        };
+      };
       # Force this config to remove the gnome portal from extraPortals -> this fixes the slow startup issue with waybar and co.
       extraPortals =
         with pkgs;
         lib.mkForce [
           xdg-desktop-portal-termfilechooser
-          # xdg-desktop-portal-gtk
+          xdg-desktop-portal-umbriel
+          xdg-desktop-portal-gtk
         ];
       config = {
         common = {
           default = [ "*" ];
           "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ "umbriel" ];
         };
       };
-      xdgOpenUsePortal = true;
+      # xdgOpenUsePortal = true;
     };
+  };
+  home-manager.users.lily.xdg.configFile."xdg-desktop-portal-termfilechooser/config" = {
+    enable = true;
+    text = ''
+      [filechooser]
+      cmd=${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+      create_help_file=1
+      default_dir=$HOME
+      env=TERMCMD='kitty -T "terminal filechooser"'
+      open_mode=suggested
+      save_mode=last
+    '';
   };
 
   home-manager.users.lily = {
-    services = {
-      wpaperd = {
-        enable = true;
-        settings = {
-          eDP-1 = {
-            path = "~/.config/nixos-config/hosts/stina/resources/inland.webp";
-          };
-        };
-      };
-
-      swayidle = {
-        enable = true;
-        timeouts = [
-          {
-            timeout = 180;
-            command = "${pkgs.hyprlock}/bin/hyprlock";
-          }
-        ];
-      };
-    };
-
     programs = {
-      # hyprlock
-      hyprlock = {
+      # noctalia
+      noctalia = {
         enable = true;
         settings = {
-          general = {
-            ignore_empty_input = true;
-          };
-          input-field = {
-            outer_color = "rgba(0, 0, 0, 0)";
-            inner_color = "rgba(0, 0, 0, 0)";
-            capslock_color = "rgba(0, 0, 0, 0)";
-            check_color = "rgba(0, 0, 0, 0)";
-            fail_color = "rgba(0, 0, 0, 0)";
-            fade_on_empty = false;
-            dots_center = true;
-            hide_input = false;
-            rounding = -1;
-            outline_thickness = 0;
-            placeholder_text = "<i>...</i>";
+          shell = {
             font_family = "NotoMono Nerd Font";
-            font_color = "rgb(255, 255, 255)";
-            dots_text_format = "|";
+            lang = "en";
+            show_location = false;
+            shadow = {
+              direction  ="center";
+            };
+            panel = {
+              clipboard_placement = "attached";
+              borders = false;
+              shadow = false;
+            };
+            launcher = {
+              categories = false;
+              compact = true;
+              fetch_exchange_rtes = false;
+            };
+            screenshot = {
+              save_to_file = false;
+              copy_to_clipboard = true;
+            };
           };
-          background = {
-            path = "screenshot";
-            blur_passes = 8;
+          lockscreen = {
+            enabled = true;
+            fingerprint = false;
+            blurred_desktop = true;
+            blur_intensity = 1;
+            transition = "fade";
+          };
+          lockscreen_widgets = {
+            enabled = true;
+            widget."lockscreen-login-box@DP-1".settings = {
+              layout = "compact";
+              show_media = false;
+              show_login_button = false;
+              input_radius = 32;
+              center_password_text = true;
+            };
+          };
+          keybinds = {
+            left = [ "left" "h" ];
+            right = [ "right" "l" ];
+            up = [ "up" "k" ];
+            down = [ "down" "j" ];
+          };
+          wallpaper = {
+            enabled = true;
+            default.path = ../resources/bark.png;
+            fill_mode = "fit";
+          };
+          bar = {
+            default = {
+              start  = [
+                "workspaces"
+              ];
+              center = ["clock"];
+              end = [
+                "clipboard"
+                "network"
+                "volume"
+                "brightness"
+                "battery"
+              ];
+              widget_spacing = 15;
+            };
+          };
+          theme = {
+            mode = "dark";
+            shell_mode = "follow";
+            source = "commmunity";
+            community_palette = "Neon Surf";
+          };
+          osd = {
+            border = false;
+            position = "bottom_center";
+            kinds = {
+              lock_keys = false;
+            };
+          };
+          weather = {
+            enabled = false;
+          };
+          location = {
+            auto_locate = false;
+          };
+          idle = {
+            behavior = {
+              lock = {
+                timeout = 600;
+                action = "lock";
+                enabled = true;
+              };
+              screen-off = {
+                timeout = 660;
+                action = "screen_off";
+                enabled = true;
+              };
+              suspend = {
+                timeout = 900;
+                action = "lock_and_suspend";
+                enabled = true;
+              };
+            };
           };
         };
       };
       # niri
       niri = {
         settings = {
+          spawn-at-startup = [
+            {
+              command = ["noctalia"];
+            }
+          ];
           recent-windows = {
             highlight = {
               active-color = "#ffffff";
@@ -238,6 +337,37 @@
               ];
               open-floating = true;
             }
+            {
+              matches = [
+                {
+                  app-id = "PacketTracer";
+                }
+              ];
+              excludes = [
+                {
+                  title = "Cisco Packet Tracer.*";
+                }
+              ];
+              open-floating = true;
+            }
+            {
+              matches = [
+                {
+                  app-id = "PacketTracer";
+                  title = "Cisco Packet Tracer.*";
+                }
+              ];
+              open-maximized = true;
+            }
+            {
+              matches = [
+                {
+                  app-id = "firefox";
+                  title = "Picture-in-Picture";
+                }
+              ];
+              open-floating = true;
+            }
           ];
           environment = {
             XDG_CURRENT_DESKTOP = "niri";
@@ -282,63 +412,53 @@
             "XF86AudioRaiseVolume" = {
               allow-when-locked = true;
               action.spawn = [
-                # I think @DEFAULT_SINK@ acts as a var or identifier for wpctl, means to access the default audio input device (being called a sink)
-                # wpctl is a CLI for the PipeWire session manager WirePlumber
-                "wpctl"
-                "set-volume"
-                "@DEFAULT_SINK@"
-                ".05+"
-                "-l"
-                "1"
+                "noctalia"
+                "msg"
+                "volume-up"
               ];
             };
             "XF86AudioLowerVolume" = {
               allow-when-locked = true;
               action.spawn = [
-                "wpctl"
-                "set-volume"
-                "@DEFAULT_SINK@"
-                ".05-"
-                "-l"
-                "1"
+                "noctalia"
+                "msg"
+                "volume-down"
               ];
             };
 
             "XF86AudioMute" = {
               allow-when-locked = true;
               action.spawn = [
-                "wpctl"
-                "set-mute"
-                "@DEFAULT_SINK@"
-                "toggle"
+                "noctalia"
+                "msg"
+                "volume-mute"
               ];
             };
 
             "XF86AudioMicMute" = {
               allow-when-locked = true;
               action.spawn = [
-                "wpctl"
-                "set-mute"
-                "@DEFAULT_SOURCE@"
-                "toggle"
+                "noctalia"
+                "msg"
+                "mic-mute"
               ];
             };
 
             "XF86MonBrightnessUp" = {
               allow-when-locked = true;
               action.spawn = [
-                "brightncessctl"
-                "s"
-                "+5%"
+                "noctalia"
+                "msg"
+                "brightness-up"
               ];
             };
 
             "XF86MonBrightnessDown" = {
               allow-when-locked = true;
               action.spawn = [
-                "brightncessctl"
-                "s"
-                "5%-"
+                "noctalia"
+                "msg"
+                "brightness-up"
               ];
             };
 
@@ -387,21 +507,25 @@
             "Mod+Shift+8".action.move-window-to-workspace = [ 8 ];
             "Mod+Shift+9".action.move-window-to-workspace = [ 9 ];
 
-            "Print".action.spawn = [
-              "hyprshot"
-              "-m"
-              "region"
-            ];
             "Ctrl+Print".action.spawn = [
-              "hyprshot"
-              "--clipboard-only"
-              "-m"
-              "region"
+              "noctalia"
+              "msg"
+              "screenshot-region"
             ];
 
-            "Alt+R".action.spawn = [ "fuzzel" ];
+            "Alt+R".action.spawn = [ 
+              "noctalia" 
+              "msg" 
+              "panel-toggle" 
+              "launcher" 
+            ];
 
-            "Mod+Shift+L".action.spawn = [ "hyprlock" ];
+            "Mod+Shift+L".action.spawn = [ 
+              "noctalia" 
+              "msg" 
+              "session" 
+              "lock" 
+            ];
           };
 
           overview = {

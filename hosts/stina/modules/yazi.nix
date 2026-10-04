@@ -22,6 +22,13 @@
           { run = "xdg-open %s1"; desc = "Open"; }
         ]; 
       };
+      open = {
+        rules = [
+	        { url = "*"; use = [ "edit" "open" ]; }
+	        { url = "*.json"; use = [ "edit" ]; }
+	        { url = "*.txt"; use = [ "edit" ]; }
+        ];
+      };
     };
     plugins = { inherit (pkgs.yaziPlugins) wl-clipboard; };
     flavors = {

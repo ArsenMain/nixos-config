@@ -44,7 +44,7 @@
           private_browsing = true;
         };
       };
-      DisableBuiltinPDFViewer = true;
+      #DisableBuiltinPDFViewer = true;
       DisableFirefoxAccounts = true;
       DisableFormHistory = true;
       DisablePocket = true;
@@ -53,7 +53,7 @@
       DisplayMenuBar = "never";
       DontCheckDefaultBrowser = true;
       OfferToSaveLogins = false;
-      PDFjs.Enable = false;
+      #PDFjs.Enable = false;
     };
   };
 }

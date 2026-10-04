@@ -5,6 +5,7 @@
       settings = {
         enableSplashScreen = false;
         minimizeToTray = false;
+        tray = false;
       };
       vencord = {
         settings = {

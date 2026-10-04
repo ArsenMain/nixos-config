@@ -148,7 +148,7 @@ stdenvNoCC.mkDerivation {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "cisco-pt8.desktop";
+      name = "cisco-pt8";
       desktopName = "Cisco Packet Tracer 8";
       icon = "cisco-packet-tracer-8";
       exec = "packettracer8 %f";

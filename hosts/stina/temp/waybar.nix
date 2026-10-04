@@ -20,17 +20,8 @@
             "modules-right" = [
               "pulseaudio"
               "battery"
-              "tray"
               "niri/workspaces"
             ];
-
-            "hyprland/workspaces" = {
-              "format" = "{name}: {icon}";
-              "format-icons" = {
-                "active" = "";
-                "default" = "";
-              };
-            };
 
             "tray" = {
               "icon-size" = 16;
@@ -88,7 +79,6 @@
             "niri/workspaces" = {
               "disable-click" = true;
             };
-
           };
         };
         style = ../resources/waybar.css;

@@ -21,10 +21,14 @@
       dates = "weekly";
       options = "--delete-older-than 10d";
     };
+    channel.enable = false;
   };
 
   nixpkgs.config = {
     allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-41.10.6"
+    ];
   };
 
   networking = {
@@ -71,18 +75,25 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.lily = {
-    isNormalUser = true;
-    description = "lily";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-    # For packages see pkgs.nix
+  users.users = {
+    lily = {
+        isNormalUser = true;
+        description = "lily";
+        extraGroups = [
+          "networkmanager"
+          "wheel"
+        ];
+        # For packages see pkgs.nix
+      };
+    alex = {
+        isNormalUser = true;
+        description = "twink uwu bf";
+        extraGroups = [
+          "networkmanager"
+        ];
+        # For packages see pkgs.nix
+      };
   };
-
-  # Fonts
-  fonts.packages = with pkgs; [ nerd-fonts.noto ];
 
   services.gnome.gnome-keyring.enable = lib.mkForce false;
 

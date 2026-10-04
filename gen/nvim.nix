@@ -117,28 +117,33 @@
         };
         statusline.lualine = {
           enable = true;
-          icons.enable = true;
-          theme = "gruvbox_dark";
-          activeSection = {
-            a = [
-              ''
-                { 
-                        "mode", 
-                        icons_enabled = true, 
-                        separator = { right = '' }, 
-                }
-              ''
-              ''
-                { 
-                        "", 
-                        draw_empty = true, 
-                        separator = { 
-                                        left = '', 
-                                        right = '' 
-                                    } 
-                }
-              ''
-            ];
+          # icons.enable = true;
+          setupOpts = {
+            options = {
+              icons_enabled = true;
+              theme = "gruvbox_dark";
+            };
+            sections = {
+              lualine_a = [
+                ''
+                  { 
+                          "mode", 
+                          icons_enabled = true, 
+                          separator = { right = '' }, 
+                  }
+                ''
+                ''
+                  { 
+                          "", 
+                          draw_empty = true, 
+                          separator = { 
+                                          left = '', 
+                                          right = '' 
+                                      } 
+                  }
+                ''
+              ];
+            };
           };
         };
         theme = {
