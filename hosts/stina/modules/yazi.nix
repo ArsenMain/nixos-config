@@ -27,6 +27,8 @@
 	        { url = "*"; use = [ "edit" "open" ]; }
 	        { url = "*.json"; use = [ "edit" ]; }
 	        { url = "*.txt"; use = [ "edit" ]; }
+	        { url = "*.zip"; use = [ "unzip" "edit" ]; }
+	        { url = "*.pdf"; use = [ "open" ]; }
         ];
       };
     };

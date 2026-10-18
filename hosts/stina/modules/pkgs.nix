@@ -36,6 +36,9 @@
     (rstudioWrapper.override { 
       packages = with rPackages; [ tidyverse data_table rmarkdown]; 
     })
+    # teehee
+    vital
+    teams-for-linux
     # I actually had these as user packages, but 
     # I'm pretty sure the desktop entries I make in desktop.nix 
     # Are defined on a system level, so if I install a 
@@ -48,7 +51,7 @@
     dotnetCorePackages.sdk_9_0_1xx
     # Unable to build for the moment, look into it
     # mysql-workbench
-    gimp2
+    gimp
     libreoffice
     inkscape
   ];

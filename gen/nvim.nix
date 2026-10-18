@@ -95,6 +95,11 @@
             lsp.enable = true;
             format.enable = true;
           };
+          tsx = {
+            enable = true;
+            lsp.enable = true;
+            format.enable = true;
+          };
           python = {
             enable = true;
             lsp.enable = true;

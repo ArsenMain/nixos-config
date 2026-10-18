@@ -52,16 +52,6 @@
   xdg = {
     portal = {
       enable = true;
-      wlr = {
-        enable = true;
-        settings = {
-          screencast = {
-            output_name = "eDP-1";
-            chooser_type = "simple";
-            chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
-          };
-        };
-      };
       # Force this config to remove the gnome portal from extraPortals -> this fixes the slow startup issue with waybar and co.
       extraPortals =
         with pkgs;
@@ -126,7 +116,7 @@
             fingerprint = false;
             blurred_desktop = true;
             blur_intensity = 1;
-            transition = "fade";
+            transition = [];
           };
           lockscreen_widgets = {
             enabled = true;
@@ -156,6 +146,7 @@
               ];
               center = ["clock"];
               end = [
+                "tray"
                 "clipboard"
                 "network"
                 "volume"
@@ -279,7 +270,7 @@
             };
             border = {
               enable = true;
-              width = 2;
+              width = 1;
               active.color = "#ffffff";
               inactive.color = "#101010";
             };
@@ -526,6 +517,8 @@
               "session" 
               "lock" 
             ];
+
+            "Mod+F".action.toggle-window-floating = [];
           };
 
           overview = {
