@@ -15,7 +15,7 @@
     xwayland-satellite
     pulseaudio
     bitwarden-cli
-    gimp2
+    gimp
     libreoffice-qt
     vital
     cmus
