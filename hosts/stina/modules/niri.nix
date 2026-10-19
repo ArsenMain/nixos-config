@@ -478,6 +478,10 @@
             "Shift+Mod+K".action.move-window-to-workspace-up = [ ];
             "Mod+Return".action.toggle-overview = [ ];
 
+            # Monitors
+            "Mod+L".action.move-window-to-monitor-right = [ ];
+            "Mod+H".action.move-window-to-monitor-left = [ ];
+
             "Mod+1".action.focus-workspace = [ 1 ];
             "Mod+2".action.focus-workspace = [ 2 ];
             "Mod+3".action.focus-workspace = [ 3 ];
